@@ -2,11 +2,13 @@
 #  HW              : Final Project
 #  Algorithm       : K-means
 
+
+library("factoextra")
 ## remove all objects
 rm(list=ls())
 dev.off
 #read CSV
-data<-read.csv("attrition_data.csv",header = TRUE,na.strings = "?")
+data<-read.csv("../attrition_data.csv",header = TRUE,na.strings = "?")
 #  clean NA datas
 k=na.omit(data)
 # to much NA in TERMINATION_YEAR
@@ -62,6 +64,7 @@ print(kMeanTable)
 #scatterplotMatrix(newdata[,5:10]) 
 
 
+fviz_cluster(kMean,data=knnData[,-c(18)])
 
 
 
