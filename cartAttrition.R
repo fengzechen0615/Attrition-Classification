@@ -59,18 +59,22 @@ test<-data[-idx,]
 
 set.seed(123)
 
-vec <- c(0, 1.1,
-         1.3, 0)
+vec <- c(0, 2,
+         1.7, 0)
 
-cost = matrix(vec, nrow = 2, byrow = TRUE)
+cost <- matrix(vec, nrow = 2, byrow = TRUE)
 
-cartClass <- rpart(as.factor(STATUS)~., data=training, parms = list(loss = cost))
+cartClass <- rpart(as.factor(STATUS)~., data=training, parms=list(loss = cost))
+# cartClass <- rpart(as.factor(STATUS)~., data=training)
+# cartClass$cptable
 cartPredict <- predict(cartClass, test, type='class')
 cm <- table(Actual=test$STATUS, CART=cartPredict)
-cm
+
+protential = cm[1]/(cm[1] + cm[3])
 
 cartWrong <- sum(test$STATUS != cartPredict)
 cartWrongRate <- cartWrong / length(test$STATUS)
 
 print(paste("Accuracy Rate is: ", (1 - cartWrongRate) * 100))
+print(paste("The protential of employees leaving the company is: ", protential*100 ))
 # "Accuracy Rate is:  65"

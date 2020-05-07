@@ -97,12 +97,17 @@ set.seed(123)
 
 # CF = 0.20
 
-C50Class <- C5.0(as.factor(STATUS)~., data=training, control=C5.0Control(CF = 0.20), trials=30)
+# cost <- matrix(c(0, 2, 1, 0), nrow = 2, byrow = TRUE)
+
+C50Class <- C5.0(as.factor(STATUS)~., data=training, control=C5.0Control(CF = 0.20), cost=cost, trials=30)
 
 C50Predict <- predict(C50Class, test, type="class")
-table(actual=test$STATUS, C50=C50Predict)
+cm <- table(actual=test$STATUS, C50=C50Predict)
+
+protential = cm[1]/(cm[1] + cm[3])
 
 wrong <- (test$STATUS != C50Predict)
 C50Rate <- sum(wrong)/length(test$STATUS)
 
 print(paste("Accuracy Rate is: ", (1-C50Rate)*100))
+print(paste("The protential of employees leaving the company is: ", protential*100 ))

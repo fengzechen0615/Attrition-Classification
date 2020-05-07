@@ -62,7 +62,7 @@ set.seed(123)
 # for (i in 1: (n - 1)) {
 #   print(i)
 #   set.seed(100)
-#   rf = randomForest(as.factor(STATUS)~., data=training, ntree=1000, mtry=i)
+#   rf = randomForest(as.factor(STATUS)~., data=training, mtry=i)
 #   rate[i] <- mean(as.numeric(rf$err.rate))
 #   print(rf)
 # }
@@ -75,15 +75,15 @@ set.seed(123)
 # 0.2632886
 
 # which.min(rate)
-# mtry = 22
+# mtry = 18
 
 # find the best ntree
-# rf <- randomForest(as.factor(STATUS)~., data=training, mtry=22, importance=TRUE, ntree=1000)
+# rf <- randomForest(as.factor(STATUS)~., data=training, mtry=18, importance=TRUE, ntree=1000)
 # plot(rf)
 
 # when trees equal 600, the model is becoming steady.
 
-randomForest <- randomForest(as.factor(STATUS)~., data=training, mtry=22, importance=TRUE, ntree=600, proximity=TRUE)
+randomForest <- randomForest(as.factor(STATUS)~., data=training, mtry=18, importance=TRUE, ntree=600, proximity=TRUE)
 
 # importance(randomForest)
 # max ANNUAL_RATE
@@ -93,10 +93,11 @@ randomForest <- randomForest(as.factor(STATUS)~., data=training, mtry=22, import
 
 randomForestPrediction <- predict(randomForest, test)
 
-table(actual=test$STATUS, Prediction=randomForestPrediction)
+cm <- table(actual=test$STATUS, Prediction=randomForestPrediction)
+protential = cm[1]/(cm[1] + cm[3])
 
 wrong <- (test$STATUS != randomForestPrediction)
 randomForestRate = sum(wrong)/length(test$STATUS)
 
 print(paste("Accuracy Rate is: ", (1-randomForestRate)*100))
-# "Accuracy Rate is: 75"
+print(paste("The protential of employees leaving the company is: ", protential*100 ))
