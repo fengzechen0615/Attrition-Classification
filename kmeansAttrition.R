@@ -1,14 +1,15 @@
 #  Group           : We have two databases
 #  HW              : Final Project
 #  Algorithm       : K-means
-
-
+#install.packages("car")
+library(corrplot)
 library("factoextra")
+library(car)
 ## remove all objects
 rm(list=ls())
 dev.off
 #read CSV
-data<-read.csv("../attrition_data.csv",header = TRUE,na.strings = "?")
+data<-read.csv("attrition_data.csv",header = TRUE,na.strings = "?")
 #  clean NA datas
 k=na.omit(data)
 # to much NA in TERMINATION_YEAR
@@ -47,24 +48,28 @@ data$STATUS=as.numeric(data$STATUS, levels = c("T","A"),lable=c(1,2))
 #drop some features that we dont need
 newdata<-data[,-c(1,4)]
 
-knnData=newdata
+kData=newdata
 standardize <- function(x){x/max(x)} 
 
-#knnData$type <- as.numeric(knnData$type, levels = c("white", "red"), labels = c("1","2"))
-knnData[,-18] <- as.data.frame(lapply(knnData[,-18], standardize))
-kMean=kmeans(knnData[,-c(18)],3)
-plot(knnData[c(1,18)],col=kMean$cluster)
+#kData$type <- as.numeric(kData$type, levels = c("white", "red"), labels = c("1","2"))
+kData[,-18] <- as.data.frame(lapply(kData[,-18], standardize))
+kMean=kmeans(kData[,-c(18)],3)
+data_cor <- cor(kData[,-18])
+corrplot(corr = data_cor, method = 'color', addCoef.col="grey") 
+#scatterplotMatrix(kData)
+plot(kData[c(19,18)],col=kMean$cluster)
 points(kMean$centers,col=1:3,pch=16,cex=2)
 
 
-kMeanTable=table(clusters=kMean$cluster,STATUS=knnData[,'STATUS'])
+kMeanTable=table(clusters=kMean$cluster,STATUS=kData[,'STATUS'])
 print(kMeanTable)
+
 
 #library(car)
 #scatterplotMatrix(newdata[,5:10]) 
 
 
-fviz_cluster(kMean,data=knnData[,-c(18)])
+#fviz_cluster(kMean,data=knnData)
 
 
 

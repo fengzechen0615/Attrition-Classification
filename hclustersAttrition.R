@@ -14,7 +14,8 @@ data=data[,-14]
 #data_keep$TERMINATION_YEAR[is.na(data_keep$TERMINATION_YEAR)]<-0
 
 data=na.omit(data)
-
+l=levels(factor(data$REFERRAL_SOURCE))
+l
 #print(typeof(data$ETHNICITY))
 data$ETHNICITY <- as.numeric(data$ETHNICITY, levels = c("AMIND", "ASIAN", "BLACK", "HISPA", "PACIF", "TWO", "WHITE"), labels = c(1,2,3,4,5,6,7))
 data$SEX=as.numeric(data$SEX, levels = c("F","M"),lable=c(1,2))
@@ -23,10 +24,12 @@ data$NUMBER_OF_TEAM_CHANGED=as.numeric(data$NUMBER_OF_TEAM_CHANGED, levels = c("
 #gsub("e", "", group)
 #view levels of EFERRAL_SOURCE
 REFERRAL_SOURCE_Levels=levels(factor(data$REFERRAL_SOURCE))
+
 REFERRAL_SOURCE_Levels=c(REFERRAL_SOURCE_Levels)
 arr1 <- array(1:20)
 data$REFERRAL_SOURCE=as.numeric(data$NUMBER_OF_TEAM_CHANGED, levels =REFERRAL_SOURCE_Levels,lable=arr1)
 HIRE_MONTH_Levels=levels(factor(data$REFERRAL_SOURCE))
+
 arr2<-array(1:12)
 data$HIRE_MONTH=as.numeric(data$HIRE_MONTH, levels =HIRE_MONTH_Levels,lable=arr2)
 data$REHIRE=as.numeric(data$REHIRE, levels = c(TRUE,FALSE),lable=c(1,2))
@@ -56,7 +59,7 @@ hCluster=hclust(dist(hData[,-c(18)]),method="average")
 plot(hCluster)
 rect.hclust(hCluster, k = 6)
 hClustCut<-cutree(hCluster,7)
-hClusterTable=table(clusters=hClustCut,quality=hData[,'STATUS'])
+hClusterTable=table(clusters=hClustCut,STATUS=hData[,'STATUS'])
 print('hcluster Table and Plot')
 print(hClusterTable)
 

@@ -71,18 +71,22 @@ plot(ANN)
 pred<-compute(ANN ,testNN[,-18])
 pred$net.result
 pred=(pred$net.result * (max(data[,18]) - min(data[,18]))) + min(data[,18])
-pred
+
 for (i in 1: length(pred)) {
   pred[i]=round(pred[i])
 }
-pred
+
 accuracy= (test$STATUS==pred)
 
+
 acc<-sum(accuracy)/length(accuracy)
+
+cm=table(actual=test$STATUS,ANN=pred)
+cm
+prontential=cm[1]/(cm[1]+cm[3])
+prontential
 print(paste("the accuracy is",acc))
-
-
-
+print(paste("the protential of employees leaving the company is: ",prontential))
 
 
 
