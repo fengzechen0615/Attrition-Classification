@@ -7,45 +7,50 @@ rm(list = ls())
 library("randomForest")
 
 # read csv file
-data<-read.csv("attrition_data.csv",header = TRUE,na.strings = "?")
-data_keep=data
+data<-read.csv("attrition_data.csv", header = TRUE, na.strings = "?")
+data_keep <- data
 #  clean NA datas
-k=na.omit(data)
+k <- na.omit(data)
 # to much NA in TERMINATION_YEAR
-data=data[,-14]
+data <- data[, -14]
 #data_keep$TERMINATION_YEAR[is.na(data_keep$TERMINATION_YEAR)]<-0
 
-data=na.omit(data)
+data <- na.omit(data)
 
 #print(typeof(data$ETHNICITY))
-data$ETHNICITY <- as.numeric(data$ETHNICITY, levels = c("AMIND", "ASIAN", "BLACK", "HISPA", "PACIF", "TWO", "WHITE"), labels = c(1,2,3,4,5,6,7))
-data$SEX=as.numeric(data$SEX, levels = c("F","M"),lable=c(1,2))
-data$MARITAL_STATUS=as.numeric(data$MARITAL_STATUS, levels = c("Divorced","Single","Married"),lable=c(1,2,3))
-data$NUMBER_OF_TEAM_CHANGED=as.numeric(data$NUMBER_OF_TEAM_CHANGED, levels = c("0","1","2","3","3+"),lable=c(0,1,2,3,4))
-#gsub("e", "", group)
+data$ETHNICITY <- as.numeric(data$ETHNICITY, 
+                             levels=c("AMIND", "ASIAN", "BLACK", "HISPA", "PACIF", "TWO", "WHITE"), 
+                             labels=c(1, 2, 3, 4, 5, 6, 7))
+data$SEX <- as.numeric(data$SEX, levels=c("F", "M"), labels=c(1, 2))
+data$MARITAL_STATUS <- as.numeric(data$MARITAL_STATUS, 
+                                  levels=c("Divorced", "Single", "Married"), 
+                                  labels=c(1, 2, 3))
+data$NUMBER_OF_TEAM_CHANGED <- as.numeric(data$NUMBER_OF_TEAM_CHANGED, 
+                                          levels=c("0", "1", "2", "3", "3+"),
+                                          labels=c(0, 1, 2, 3, 4))
 #view levels of EFERRAL_SOURCE
-REFERRAL_SOURCE_Levels=levels(factor(data$REFERRAL_SOURCE))
-REFERRAL_SOURCE_Levels=c(REFERRAL_SOURCE_Levels)
+REFERRAL_SOURCE_Levels <- levels(factor(data$REFERRAL_SOURCE))
 arr1 <- array(1:20)
-data$REFERRAL_SOURCE=as.numeric(data$NUMBER_OF_TEAM_CHANGED, levels =REFERRAL_SOURCE_Levels,lable=arr1)
-HIRE_MONTH_Levels=levels(factor(data$REFERRAL_SOURCE))
-arr2<-array(1:12)
-data$HIRE_MONTH=as.numeric(data$HIRE_MONTH, levels =HIRE_MONTH_Levels,lable=arr2)
-data$REHIRE=as.numeric(data$REHIRE, levels = c(TRUE,FALSE),lable=c(1,2))
-data$IS_FIRST_JOB=as.numeric(data$REHIRE, levels = c("N","Y"),lable=c(1,2))
-data$TRAVELLED_REQUIRED=as.numeric(data$TRAVELLED_REQUIRED, levels = c("N","Y"),lable=c(1,2))
-data$DISABLED_EMP=as.numeric(data$DISABLED_EMP, levels = c("N","Y"),lable=c(1,2))
-data$DISABLED_VET=as.numeric(data$DISABLED_VET, levels = c("N","Y"),lable=c(1,2))
-data$EDUCATION_LEVEL=as.numeric(data$EDUCATION_LEVEL, levels = c("LEVEL 1","LEVEL 2","LEVEL 3","LEVEL 4","LEVEL 5"),lable=c(1,2,3,4,5))
-JOB_GROUP_Levels=levels(factor(data$JOB_GROUP))
-JOB_GROUP_Levels=c(JOB_GROUP_Levels)
-JOB_GROUP_Levels
-arr3<-array(1:60)
-data$JOB_GROUP=as.numeric(data$JOB_GROUP, levels =JOB_GROUP_Levels,lable=arr3)
-Status_Levels=levels(factor(data$STATUS))
-data$STATUS=as.numeric(data$STATUS, levels = c("T","A"),lable=c(1,2))
+data$REFERRAL_SOURCE <- as.numeric(data$NUMBER_OF_TEAM_CHANGED, levels=REFERRAL_SOURCE_Levels, labels=arr1)
+HIRE_MONTH_Levels <- levels(factor(data$HIRE_MONTH))
+arr2 <- array(1:12)
+data$HIRE_MONTH <- as.numeric(data$HIRE_MONTH, levels=HIRE_MONTH_Levels, labels=arr2)
+data$REHIRE <- as.numeric(data$REHIRE, levels=c(TRUE, FALSE), labels=c(1, 2))
+data$IS_FIRST_JOB <- as.numeric(data$REHIRE, levels=c("N", "Y"), labels=c(1, 2))
+data$TRAVELLED_REQUIRED <- as.numeric(data$TRAVELLED_REQUIRED, levels=c("N", "Y"), labels=c(1, 2))
+data$DISABLED_EMP <- as.numeric(data$DISABLED_EMP, levels=c("N", "Y"), labels=c(1, 2))
+data$DISABLED_VET <- as.numeric(data$DISABLED_VET, levels=c("N", "Y"), labels=c(1, 2))
+data$EDUCATION_LEVEL <- as.numeric(data$EDUCATION_LEVEL, 
+                                   levels=c("LEVEL 1", "LEVEL 2", "LEVEL 3", "LEVEL 4", "LEVEL 5"),
+                                   labels=c(1, 2, 3, 4, 5))
+JOB_GROUP_Levels <- levels(factor(data$JOB_GROUP))
+JOB_GROUP_Levels <- c(JOB_GROUP_Levels)
+arr3 <- array(1: 60)
+data$JOB_GROUP <- as.numeric(data$JOB_GROUP, levels=JOB_GROUP_Levels, labels=arr3)
+data$STATUS <- factor(data$STATUS, levels=c("T", "A"), labels=c(1, 2))
+
 #drop some features that we dont need
-newdata<-data[,-c(1,4)]
+newdata<-data[, -c(1,4)]
 
 #############
 ##Use 30% test 70% training
@@ -70,20 +75,20 @@ set.seed(123)
 # rate
 # plot(rate)
 
-# 0.3832581 0.3314060 0.3091880 0.2943303 0.2839213 0.2763326 0.2706837 0.2703913 0.2650771 0.2645961 0.2652369 0.2616005
-# 0.2621349 0.2632359 0.2611863 0.2611982 0.2621737 0.2618234 0.2624926 0.2627373 0.2641659 0.2599642 0.2641665 0.2637233
-# 0.2632886
+# 0.3879041 0.3309677 0.3056223 0.2916020 0.2840462 0.2757956 0.2734508 0.2706642 0.2626486 0.2626204 0.2632365
+# 0.2592803 0.2586202 0.2624443 0.2563500 0.2603950 0.2575627 0.2601820 0.2583465 0.2608151 0.2615266 0.2635326
+# 0.2615647 0.2639324 0.2630074
 
 # which.min(rate)
-# mtry = 18
+# mtry = 15
 
 # find the best ntree
-# rf <- randomForest(as.factor(STATUS)~., data=training, mtry=18, importance=TRUE, ntree=1000)
+# rf <- randomForest(as.factor(STATUS)~., data=training, mtry=15, importance=TRUE, ntree=1000)
 # plot(rf)
 
 # when trees equal 600, the model is becoming steady.
 
-randomForest <- randomForest(as.factor(STATUS)~., data=training, mtry=18, importance=TRUE, ntree=600, proximity=TRUE)
+randomForest <- randomForest(as.factor(STATUS)~., data=training, mtry=15, importance=TRUE, ntree=600, proximity=TRUE)
 
 # importance(randomForest)
 # max ANNUAL_RATE
@@ -100,4 +105,4 @@ wrong <- (test$STATUS != randomForestPrediction)
 randomForestRate = sum(wrong)/length(test$STATUS)
 
 print(paste("Accuracy Rate is: ", (1-randomForestRate)*100))
-print(paste("The protential of employees leaving the company is: ", protential*100 ))
+print(paste("The potential of employees leaving the company is: ", protential*100 ))
