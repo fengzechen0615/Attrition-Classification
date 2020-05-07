@@ -115,4 +115,4 @@ wrong <- (test$STATUS != C50Predict)
 C50Rate <- sum(wrong)/length(test$STATUS)
 
 print(paste("Accuracy Rate is: ", (1-C50Rate)*100))
-print(paste("The protential of employees leaving the company is: ", protential*100 ))
+print(paste("The potential of employees leaving the company is: ", protential*100 ))
