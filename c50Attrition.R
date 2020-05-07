@@ -97,7 +97,7 @@ set.seed(123)
 
 # CF = 0.20
 
-# cost <- matrix(c(0, 2, 1, 0), nrow = 2, byrow = TRUE)
+cost <- matrix(c(0, 2, 1, 0), nrow = 2, byrow = TRUE)
 
 C50Class <- C5.0(as.factor(STATUS)~., data=training, control=C5.0Control(CF = 0.20), cost=cost, trials=30)
 
