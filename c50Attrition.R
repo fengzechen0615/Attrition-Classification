@@ -1,4 +1,4 @@
-#  Group           : Wine Quality
+#  Group           : We have two datasets
 #  HW              : Final Project
 #  Algorithm       : C50
 
