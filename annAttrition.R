@@ -1,4 +1,4 @@
-#  Group           : We have two databases
+#  Group           : We have two datasets
 #  HW              : Final Project
 #  Algorithm       : ANN
 
